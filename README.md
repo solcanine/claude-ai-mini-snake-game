@@ -16,11 +16,20 @@ A modern, responsive snake game built with **Claude AI** - showcasing the power 
 
 - 🤖 **100% AI-Generated** - Built entirely with Claude AI
 - 🎮 Classic snake gameplay with smooth controls
+- 🍎 **Special Foods System** - 5 different food types with unique effects!
+  - 🍎 **Normal Apple** - 1 point (70% spawn rate)
+  - 🌟 **Golden Apple** - 5 points (15% spawn rate)
+  - 💎 **Diamond** - 10 points! (5% spawn rate - rare!)
+  - ⚡ **Speed Boost** - Faster for 5 seconds (6% spawn rate)
+  - 🐌 **Slow Motion** - Slower for 5 seconds (4% spawn rate)
+- ✨ **Particle Effects** - Colorful burst animations when eating food
+- 🎬 **Smooth Animations** - Food spawn animation & death fade effect
+- 📊 **Animated Score Counter** - Score smoothly counts up
+- ⏸️ **Pause Functionality** - Press SPACE to pause/resume
 - 📱 Fully mobile responsive (swipe & on-screen controls)
 - 🏆 High score tracking with localStorage
 - ⚡ Progressive difficulty - speed increases as you score
 - 💎 Beautiful UI with glassmorphism effects
-- 📊 Real-time score display
 - ⚡ Zero dependencies - Pure vanilla JavaScript
 
 ## 🎯 How to Play
@@ -29,14 +38,24 @@ A modern, responsive snake game built with **Claude AI** - showcasing the power 
 
 **Controls:**
 
-- **Desktop:** Arrow keys (↑ ↓ ← →)
+- **Desktop:** Arrow keys (↑ ↓ ← →) | **SPACE** to pause
 - **Mobile:** Swipe gestures or tap D-pad buttons
 
 **Rules:**
 
 - ✅ Eat food to score points and grow
+- 🌟 Look for special foods for bonus points and power-ups!
 - ❌ Don't hit walls or yourself
 - 📈 Speed increases every 5 points
+- ⏸️ Pause anytime with SPACE key
+
+**Special Foods:**
+
+- 🍎 Red Apple = 1 point (common)
+- 🌟 Golden Apple = 5 points (uncommon)
+- 💎 Diamond = 10 points (rare!)
+- ⚡ Speed Boost = Temporary speed increase
+- 🐌 Slow Motion = Easier control for 5 seconds
 
 ## 🚀 Quick Start
 
