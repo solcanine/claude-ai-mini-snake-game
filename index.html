@@ -11,16 +11,52 @@
             box-sizing: border-box;
         }
 
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         body {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #4facfe);
+            background-size: 300% 300%;
+            animation: gradientShift 15s ease infinite;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
         }
 
         .game-container {
@@ -288,9 +324,92 @@
         .restart-btn:active {
             transform: translateY(0);
         }
+
+        /* Floating background particles */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .bg-particle {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: float linear infinite;
+        }
+
+        .bg-particle:nth-child(1) {
+            left: 10%;
+            animation-duration: 15s;
+            animation-delay: 0s;
+            width: 8px;
+            height: 8px;
+        }
+
+        .bg-particle:nth-child(2) {
+            left: 25%;
+            animation-duration: 18s;
+            animation-delay: 2s;
+            width: 6px;
+            height: 6px;
+        }
+
+        .bg-particle:nth-child(3) {
+            left: 40%;
+            animation-duration: 20s;
+            animation-delay: 4s;
+            width: 10px;
+            height: 10px;
+        }
+
+        .bg-particle:nth-child(4) {
+            left: 55%;
+            animation-duration: 16s;
+            animation-delay: 1s;
+            width: 7px;
+            height: 7px;
+        }
+
+        .bg-particle:nth-child(5) {
+            left: 70%;
+            animation-duration: 22s;
+            animation-delay: 3s;
+            width: 9px;
+            height: 9px;
+        }
+
+        .bg-particle:nth-child(6) {
+            left: 85%;
+            animation-duration: 19s;
+            animation-delay: 5s;
+            width: 6px;
+            height: 6px;
+        }
     </style>
 </head>
 <body>
+    <div class="bg-particle"></div>
+    <div class="bg-particle"></div>
+    <div class="bg-particle"></div>
+    <div class="bg-particle"></div>
+    <div class="bg-particle"></div>
+    <div class="bg-particle"></div>
     <div class="game-container">
         <h1>🐍 Mini Snake Game</h1>
         <div class="score-board">

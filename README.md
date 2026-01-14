@@ -30,6 +30,7 @@ A modern, responsive snake game built with **Claude AI** - showcasing the power 
 - 🏆 High score tracking with localStorage
 - ⚡ Progressive difficulty - speed increases as you score
 - 💎 Beautiful UI with glassmorphism effects
+- 🌈 **Animated Background** - Dynamic gradient with floating particles
 - ⚡ Zero dependencies - Pure vanilla JavaScript
 
 ## 🎯 How to Play
