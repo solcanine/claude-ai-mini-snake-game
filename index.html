@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Snake Game</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         * {
             margin: 0;
@@ -15,9 +17,11 @@
             0% {
                 background-position: 0% 50%;
             }
+
             50% {
                 background-position: 100% 50%;
             }
+
             100% {
                 background-position: 0% 50%;
             }
@@ -46,7 +50,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
@@ -54,7 +58,7 @@
             z-index: 0;
         }
 
-        body > * {
+        body>* {
             position: relative;
             z-index: 1;
         }
@@ -286,6 +290,7 @@
                 opacity: 0;
                 transform: translate(-50%, -50%) scale(0.8);
             }
+
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
@@ -327,16 +332,21 @@
 
         /* Floating background particles */
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0) rotate(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.3;
             }
+
             90% {
                 opacity: 0.3;
             }
+
             100% {
                 transform: translateY(-100vh) rotate(360deg);
                 opacity: 0;
@@ -403,6 +413,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="bg-particle"></div>
     <div class="bg-particle"></div>
@@ -452,57 +463,53 @@
         const gameOverElement = document.getElementById('gameOver');
         const finalScoreElement = document.getElementById('finalScore');
 
-        // Game settings
         const gridSize = 20;
         const tileCount = canvas.width / gridSize;
         let speed = 5;
         let lastMoveTime = 0;
         let moveInterval = 1000 / speed;
 
-        // Snake
         let snake = [
             { x: 10, y: 10 }
         ];
         let velocityX = 0;
         let velocityY = 0;
 
-        // Food types
         const FOOD_TYPES = {
-            NORMAL: { 
-                color: '#ff6b6b', 
-                emoji: '🍎', 
-                points: 1, 
-                probability: 0.70 
+            NORMAL: {
+                color: '#ff6b6b',
+                emoji: '🍎',
+                points: 1,
+                probability: 0.70
             },
-            GOLDEN: { 
-                color: '#ffd700', 
-                emoji: '🌟', 
-                points: 5, 
-                probability: 0.15 
+            GOLDEN: {
+                color: '#ffd700',
+                emoji: '🌟',
+                points: 5,
+                probability: 0.15
             },
-            DIAMOND: { 
-                color: '#00d4ff', 
-                emoji: '💎', 
-                points: 10, 
-                probability: 0.05 
+            DIAMOND: {
+                color: '#00d4ff',
+                emoji: '💎',
+                points: 10,
+                probability: 0.05
             },
-            SPEED_BOOST: { 
-                color: '#ff8c42', 
-                emoji: '⚡', 
-                points: 1, 
+            SPEED_BOOST: {
+                color: '#ff8c42',
+                emoji: '⚡',
+                points: 1,
                 probability: 0.06,
                 effect: 'speed'
             },
-            SLOW_MO: { 
-                color: '#a0d2ff', 
-                emoji: '🐌', 
-                points: 1, 
+            SLOW_MO: {
+                color: '#a0d2ff',
+                emoji: '🐌',
+                points: 1,
                 probability: 0.04,
                 effect: 'slow'
             }
         };
 
-        // Food
         let food = {
             x: 15,
             y: 15,
@@ -511,7 +518,6 @@
             type: FOOD_TYPES.NORMAL
         };
 
-        // Game state
         let score = 0;
         let displayScore = 0;
         let highScore = localStorage.getItem('snakeHighScore') || 0;
@@ -523,14 +529,11 @@
         let activeEffect = null;
         let effectEndTime = 0;
 
-        // Particle system
         let particles = [];
 
-        // Input handling
         let nextDirection = null;
         let directionChanged = false;
 
-        // Particle class
         class Particle {
             constructor(x, y, color) {
                 this.x = x;
@@ -540,7 +543,7 @@
                 this.vx = Math.cos(angle) * speed;
                 this.vy = Math.sin(angle) * speed;
                 this.life = 1;
-                this.decay = 0.06; // Very fast decay
+                this.decay = 0.06;
                 this.size = Math.random() * 2.5 + 1.5;
                 this.color = color;
                 this.initialSize = this.size;
@@ -549,21 +552,21 @@
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                this.vx *= 0.92; // stronger friction
+                this.vx *= 0.92;
                 this.vy *= 0.92;
                 this.life -= this.decay;
-                this.size = this.initialSize * this.life; // shrink over time
+                this.size = this.initialSize * this.life;
             }
 
             draw(ctx) {
                 if (this.life <= 0 || this.size <= 0) return;
-                const alpha = this.life * this.life; // Ease out
+                const alpha = this.life * this.life;
                 ctx.globalAlpha = alpha;
                 ctx.fillStyle = this.color;
                 ctx.fillRect(
-                    Math.round(this.x - this.size/2), 
-                    Math.round(this.y - this.size/2), 
-                    Math.ceil(this.size), 
+                    Math.round(this.x - this.size / 2),
+                    Math.round(this.y - this.size / 2),
+                    Math.ceil(this.size),
                     Math.ceil(this.size)
                 );
             }
@@ -572,12 +575,10 @@
         document.addEventListener('keydown', handleKeyPress);
 
         function handleKeyPress(e) {
-            // Prevent default arrow key behavior (scrolling)
-            if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
                 e.preventDefault();
             }
 
-            // Handle pause
             if (e.code === 'Space') {
                 if (gameRunning && velocityX !== 0 || velocityY !== 0) {
                     isPaused = !isPaused;
@@ -587,7 +588,7 @@
 
             if (!gameRunning || directionChanged || isPaused) return;
 
-            switch(e.code) {
+            switch (e.code) {
                 case 'ArrowUp':
                     if (velocityY === 0) {
                         nextDirection = { x: 0, y: -1 };
@@ -615,11 +616,10 @@
             }
         }
 
-        // Mobile control buttons
         function handleDirectionChange(direction) {
             if (!gameRunning || directionChanged) return;
 
-            switch(direction) {
+            switch (direction) {
                 case 'up':
                     if (velocityY === 0) {
                         nextDirection = { x: 0, y: -1 };
@@ -647,7 +647,6 @@
             }
         }
 
-        // Touch button event listeners
         document.getElementById('btnUp').addEventListener('touchstart', (e) => {
             e.preventDefault();
             handleDirectionChange('up');
@@ -665,18 +664,16 @@
             handleDirectionChange('right');
         });
 
-        // Also support click for testing on desktop
         document.getElementById('btnUp').addEventListener('click', () => handleDirectionChange('up'));
         document.getElementById('btnDown').addEventListener('click', () => handleDirectionChange('down'));
         document.getElementById('btnLeft').addEventListener('click', () => handleDirectionChange('left'));
         document.getElementById('btnRight').addEventListener('click', () => handleDirectionChange('right'));
 
-        // Swipe gesture support
         let touchStartX = 0;
         let touchStartY = 0;
         let touchEndX = 0;
         let touchEndY = 0;
-        
+
         canvas.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
@@ -694,7 +691,6 @@
             const minSwipeDistance = 30;
 
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                // Horizontal swipe
                 if (Math.abs(deltaX) > minSwipeDistance) {
                     if (deltaX > 0) {
                         handleDirectionChange('right');
@@ -703,7 +699,6 @@
                     }
                 }
             } else {
-                // Vertical swipe
                 if (Math.abs(deltaY) > minSwipeDistance) {
                     if (deltaY > 0) {
                         handleDirectionChange('down');
@@ -717,7 +712,7 @@
         function getRandomFoodType() {
             const rand = Math.random();
             let cumulative = 0;
-            
+
             for (const [key, type] of Object.entries(FOOD_TYPES)) {
                 cumulative += type.probability;
                 if (rand < cumulative) {
@@ -739,55 +734,46 @@
             while (!validPosition) {
                 food.x = Math.floor(Math.random() * tileCount);
                 food.y = Math.floor(Math.random() * tileCount);
-                
+
                 // Check if food is not on snake
-                validPosition = !snake.some(segment => 
+                validPosition = !snake.some(segment =>
                     segment.x === food.x && segment.y === food.y
                 );
             }
-            
-            // Assign random food type
+
             food.type = getRandomFoodType();
-            
-            // Reset spawn animation
+
             food.spawnTime = Date.now();
             food.scale = 0;
         }
 
         function update(currentTime) {
-            // Apply direction change immediately
             if (nextDirection) {
                 velocityX = nextDirection.x;
                 velocityY = nextDirection.y;
                 nextDirection = null;
             }
-            
-            // Reset direction change flag
+
             directionChanged = false;
 
             if (!gameRunning || isPaused) return;
 
-            // Don't update if snake isn't moving yet
             if (velocityX === 0 && velocityY === 0) return;
 
-            // Only move snake at intervals (not every frame)
             if (currentTime - lastMoveTime < moveInterval) return;
-            
+
             lastMoveTime = currentTime;
 
-            // Move snake
             const head = {
                 x: snake[0].x + velocityX,
                 y: snake[0].y + velocityY
             };
 
-            // Check wall collision
             if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
                 endGame();
                 return;
             }
 
-            // Check self collision
             if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
                 endGame();
                 return;
@@ -795,39 +781,34 @@
 
             snake.unshift(head);
 
-            // Check food collision
             if (head.x === food.x && head.y === food.y) {
-                // Add points based on food type
                 score += food.type.points;
-                
-                // Create particle burst at food position with food color
+
                 createParticleBurst(
                     food.x * gridSize + gridSize / 2,
                     food.y * gridSize + gridSize / 2,
                     food.type.color
                 );
-                
-                // Handle special effects
+
                 if (food.type.effect === 'speed') {
                     activeEffect = 'speed';
-                    effectEndTime = Date.now() + 5000; // 5 seconds
+                    effectEndTime = Date.now() + 5000;
                     speed = Math.min(speed * 1.5, 12);
                     moveInterval = 1000 / speed;
                 } else if (food.type.effect === 'slow') {
                     activeEffect = 'slow';
-                    effectEndTime = Date.now() + 5000; // 5 seconds
+                    effectEndTime = Date.now() + 5000;
                     speed = Math.max(speed * 0.6, 3);
                     moveInterval = 1000 / speed;
                 }
-                
+
                 if (score > highScore) {
                     highScore = score;
                     localStorage.setItem('snakeHighScore', highScore);
                 }
-                
+
                 placeFood();
-                
-                // Increase speed slightly (only for normal progression)
+
                 if (score % 5 === 0 && !activeEffect) {
                     speed = Math.min(speed + 0.2, 8);
                     moveInterval = 1000 / speed;
@@ -836,7 +817,6 @@
                 snake.pop();
             }
 
-            // Check if effect expired
             if (activeEffect && Date.now() > effectEndTime) {
                 activeEffect = null;
                 speed = 5 + Math.floor(score / 5) * 0.2;
@@ -844,7 +824,6 @@
                 moveInterval = 1000 / speed;
             }
 
-            // Animate score counter
             if (displayScore < score) {
                 displayScore += Math.max(1, Math.ceil((score - displayScore) / 10));
                 if (displayScore > score) displayScore = score;
@@ -852,7 +831,6 @@
                 highScoreElement.textContent = highScore;
             }
 
-            // Update particles
             particles = particles.filter(p => {
                 p.update();
                 return p.life > 0;
@@ -860,11 +838,9 @@
         }
 
         function draw() {
-            // Clear canvas
             ctx.fillStyle = '#1a1a2e';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw grid
             ctx.strokeStyle = '#2a2a3e';
             ctx.lineWidth = 0.5;
             for (let i = 0; i <= tileCount; i++) {
@@ -872,31 +848,28 @@
                 ctx.moveTo(i * gridSize, 0);
                 ctx.lineTo(i * gridSize, canvas.height);
                 ctx.stroke();
-                
+
                 ctx.beginPath();
                 ctx.moveTo(0, i * gridSize);
                 ctx.lineTo(canvas.width, i * gridSize);
                 ctx.stroke();
             }
 
-            // Draw snake with death animation
             ctx.save();
             if (!gameRunning && deathAnimation < 1) {
                 ctx.globalAlpha = deathOpacity;
             }
-            
+
             snake.forEach((segment, index) => {
                 if (index === 0) {
-                    // Head
                     ctx.fillStyle = '#4ecca3';
                     ctx.shadowBlur = 10;
                     ctx.shadowColor = '#4ecca3';
                 } else {
-                    // Body
                     ctx.fillStyle = `rgba(78, 204, 163, ${1 - (index / snake.length) * 0.5})`;
                     ctx.shadowBlur = 5;
                 }
-                
+
                 ctx.fillRect(
                     segment.x * gridSize + 1,
                     segment.y * gridSize + 1,
@@ -907,27 +880,24 @@
             });
             ctx.restore();
 
-            // Animate food spawn
             const timeSinceSpawn = Date.now() - food.spawnTime;
             if (timeSinceSpawn < 300) {
                 const progress = timeSinceSpawn / 300;
                 food.scale = Math.min(1, progress * 1.5);
                 if (food.scale > 1) {
-                    food.scale = 1 + (1 - progress) * 0.2; // Bounce effect
+                    food.scale = 1 + (1 - progress) * 0.2;
                 }
             } else {
                 food.scale = 1;
             }
 
-            // Draw food with animation and type
             ctx.save();
             ctx.translate(
                 food.x * gridSize + gridSize / 2,
                 food.y * gridSize + gridSize / 2
             );
             ctx.scale(food.scale, food.scale);
-            
-            // Draw circle with food type color
+
             ctx.fillStyle = food.type.color;
             ctx.shadowBlur = 15;
             ctx.shadowColor = food.type.color;
@@ -935,34 +905,31 @@
             ctx.arc(0, 0, gridSize / 2 - 2, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
-            
-            // Draw emoji on top
+
             ctx.font = `${gridSize - 4}px Arial`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(food.type.emoji, 0, 0);
-            
+
             ctx.restore();
 
-            // Draw particles
             if (particles.length > 0) {
                 ctx.save();
                 particles.forEach(p => p.draw(ctx));
                 ctx.restore();
-                ctx.globalAlpha = 1; // Reset
+                ctx.globalAlpha = 1;
             }
 
-            // Draw active effect indicator
             if (activeEffect) {
                 const timeLeft = Math.max(0, effectEndTime - Date.now());
                 const progress = timeLeft / 5000;
-                
+
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
                 ctx.fillRect(10, 10, 120, 30);
-                
+
                 ctx.fillStyle = activeEffect === 'speed' ? '#ff8c42' : '#a0d2ff';
                 ctx.fillRect(12, 12, 116 * progress, 26);
-                
+
                 ctx.fillStyle = 'white';
                 ctx.font = 'bold 14px Arial';
                 ctx.textAlign = 'left';
@@ -971,17 +938,16 @@
                 ctx.fillText(effectText, 20, 25);
             }
 
-            // Draw pause overlay
             if (isPaused) {
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
+
                 ctx.fillStyle = 'white';
                 ctx.font = 'bold 48px Arial';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
-                
+
                 ctx.font = '20px Arial';
                 ctx.fillText('Press SPACE to resume', canvas.width / 2, canvas.height / 2 + 40);
             }
@@ -991,23 +957,21 @@
             gameRunning = false;
             deathAnimation = 0;
             deathOpacity = 1;
-            
-            // Create explosion effect at head
+
             const head = snake[0];
             createParticleBurst(
                 head.x * gridSize + gridSize / 2,
                 head.y * gridSize + gridSize / 2,
                 '#ff6b6b'
             );
-            
-            // Animate death then show game over
+
             animateDeath();
         }
 
         function animateDeath() {
             deathAnimation += 0.05;
             deathOpacity -= 0.05;
-            
+
             if (deathAnimation < 1) {
                 requestAnimationFrame(animateDeath);
             } else {
@@ -1043,17 +1007,16 @@
         function gameLoop(currentTime = 0) {
             update(currentTime);
             draw();
-            
+
             if (gameRunning || particles.length > 0) {
                 requestAnimationFrame(gameLoop);
             }
         }
 
-        // Responsive canvas sizing
         function resizeCanvas() {
             const container = document.querySelector('.game-container');
             const maxWidth = Math.min(400, window.innerWidth - 60);
-            
+
             if (window.innerWidth <= 480) {
                 canvas.style.width = maxWidth + 'px';
                 canvas.style.height = maxWidth + 'px';
@@ -1063,16 +1026,13 @@
             }
         }
 
-        // Initial resize
         resizeCanvas();
-        
-        // Resize on window resize
+
         window.addEventListener('resize', resizeCanvas);
 
-        // Start the game
         placeFood();
         gameLoop();
     </script>
 </body>
-</html>
 
+</html>
